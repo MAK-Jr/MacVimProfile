@@ -1,7 +1,13 @@
 " Objective-C
 autocmd! BufNewFile,BufRead *.m set filetype=objc
 
-" ActionScript
+" Objective-C++
+autocmd! BufNewFile,BufRead *.mm set filetype=objc
+
+"Added by Pitt Mak
+autocmd! BufNewFile,BufRead *.h set filetype=objc
+
+"ActionScript
 autocmd! BufNewFile,BufRead *.as set filetype=actionscript
 autocmd! BufNewFile,BufRead *.mxml set filetype=mxml
 
@@ -22,3 +28,5 @@ autocmd! BufNewFile,BufRead *.zsh-theme set filetype=zsh
 
 " Nginx Config
 autocmd! BufNewFile,BufRead nginx.conf set filetype=nginx
+
+

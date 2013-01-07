@@ -1,0 +1,284 @@
+#!/usr/bin/env node
+
+var fs = require ('fs');
+
+var ocTags = "ocTags";
+var callTags = "callTags";
+
+// selector reg expression
+var reg = /[ ]*[-+][ ]*\(([A-Za-z]+[ ]*\**)+\)([ \n\t]*([A-Za-z0-9]+):?([ ]*\(([A-Za-z0-9]+[ ]*\**)+\)[ ]*[A-Za-z0-9]+)?)+/g;
+
+var callReg = /\[[^=;\{\}]*\][ \t]*/g;
+
+var createTagsForFile = function (file){
+  var string = '';
+  fs.readFile(file, function (err, data) {
+    if (err) throw err;
+    string += data;
+    var rets = string.match(reg);
+    fs.appendFileSync(ocTags, "|" + file + "\n"); // write once for every file
+    if (rets == null) return ;
+
+    // generate ocTags
+    for (var i = 0; i < rets.length; i++) {
+      var finalClub = getSelector(rets[i]);
+      rets[i] = rets[i].replace(/\+/g, '\\+');
+      rets[i] = rets[i].replace(/\*/g, '\\*');
+      rets[i] = rets[i].replace(/\(/g, '\\(');
+      rets[i] = rets[i].replace(/\)/g, '\\)');
+      var lines = getLineNoOfPattern(string, rets[i]);
+      for(var j = 0; j < lines.length; ++j){
+        var aLine = finalClub + '|' + lines[j] + '|' + file + '\n';
+        fs.appendFileSync(ocTags, aLine);
+      }
+    }
+
+    // pares selector calls
+    var matchs = string.match(callReg);
+    if (matchs == null) return ;
+
+    for (var i = 0; i < matchs.length; i++) {
+      //console.log(matchs[i]);
+      var formatItem = escapeSpecialCharForReg(matchs[i]);
+      var lines = getLineNoOfPattern(string, formatItem);
+
+       // [Important]Bug fix: get rid of NSString literal
+      matchs[i] = matchs[i].replace(/@".*\n*"/g, '');
+      // create array of index '['
+      var bracketsReg = /\[/g;
+      var array = []; // array of index of '['
+      while ((match = bracketsReg.exec(matchs[i])) != null) {
+        var pos = match.index;
+        array.push(pos);
+      }
+      // Time to parse selectors call string
+      var res = getListOfSelectorCalls(matchs[i], array);
+      for (var j = 0; j < res.length; j++) {
+        res[j] = getSelector(res[j]);
+        for (var k = 0; k < lines.length; k++) {
+          var aLine = res[j] + '|' + lines[k] + '|' + file + '\n';
+          fs.appendFileSync(callTags, aLine);
+        };
+      };
+    }
+
+  });
+};
+
+// Escape special characters liek for regex string
+var escapeSpecialCharForReg = function(s){
+    s = s.replace(/\\/g, '\\\\');
+    s = s.replace(/\//g, '\\/');
+    s = s.replace(/\[/g, '\\[');
+    s = s.replace(/\]/g, '\\]');
+    s = s.replace(/\(/g, '\\(');
+    s = s.replace(/\)/g, '\\)');
+    s = s.replace(/\*/g, '\\*');
+    s = s.replace(/\+/g, '\\+');
+    s = s.replace(/\|/g, '\\|');
+    s = s.replace(/\./g, '\\.');
+    s = s.replace(/\^/g, '\\^');
+    s = s.replace(/\$/g, '\\$');
+    s = s.replace(/\?/g, '\\?');
+    s = s.replace(/\=/g, '\\=');
+    s = s.replace(/\!/g, '\\!');
+    s = s.replace(/\:/g, '\\:');
+    s = s.replace(/\{/g, '\{');
+    s = s.replace(/\}/g, '\}');
+
+    return s;
+};
+
+// return an array of string
+// RETURN: [self alloc], [self update:(int)time]
+var getListOfSelectorCalls = function(s, listOfIndex){
+  var len  = s.length;
+  var array = [];
+  for (var i = 0; i < listOfIndex.length; i++) {
+    var string = '';
+    var ignoreChar = 0;
+    for (var j = listOfIndex[i] + 1; j < s.length; j++) {
+
+      if (s[j] == '['){
+        ignoreChar++;
+      }else if(s[j] == ']'){
+        ignoreChar--;
+        continue;
+      }
+
+      if (ignoreChar == 0) {
+        string += s[j];
+      }
+    }
+    array.push('[' + string + ']');
+  };
+  return array;
+};
+
+var getLineNoOfPattern = function(string, p){
+  var lines = [];
+  var r = new RegExp(p,"g");
+  while ((match = r.exec(string)) != null) {
+    var pos = match.index;
+    //console.log(pos);
+    var lineNo = 1;
+    for (var i = 0; i < string.length; i++) {
+      if (string[i] == '\n') {
+        lineNo++;
+      }
+      if (i == pos ) break;
+    }
+    lines.push(lineNo);
+  }
+  return lines;
+};
+
+// Check for objc file type
+var isObjcFile = function(filename){
+  var r = /(\.m|\.h)$/;
+  var res = filename.match(r);
+  if (res == null) return false;
+  return true;
+}
+
+// walk throught a directory by using find command
+var exec = require('child_process').exec;
+var readDir =function(path){
+  /* Do a trik to escape spaces for command line use */
+  path = path.replace(/ /g,'\\ ');
+  var cmd = 'find ' + path;
+  exec(cmd,function (error, stdout, stderr) {
+    console.log(stderr);
+    var file_list = stdout.split('\n');
+
+    for (var i = 0; i < file_list.length; i++) {
+      if (isObjcFile(file_list[i])) {
+        file_list[i] = fs.realpathSync(file_list[i]);
+        createTagsForFile(file_list[i]);
+      }
+    };
+  });
+};
+
+var getSelector = function(string){
+  var res = string.match(/:/g);
+  var r;
+  if (res == null) {
+    var brace = string.match(/\(/g);
+    if (brace == null) r = /[ ]+([A-Za-z0-9]+)[ ]*\]/;
+    else r = /[ ]*\([A-Za-z0-9]+[ ]*\**\)[ ]*([A-Za-z0-9]+)/;
+    var arr = string.match(r);
+    //console.log(arr[1]);
+    if (arr != null) {
+      return arr[1];
+    }else{
+      return 'Pattern Not Found';
+    }
+  }else{
+    r = /[ ]*([A-Za-z0-9]+:)+/g;
+    var arr = string.match(r);
+    if (arr != null){
+      finalClub = arr.join('');
+      finalClub = finalClub.replace(/ /g,'');
+      //console.log(finalClub);
+      return finalClub;
+    }else{
+      return 'Pattern Not Found'
+    }
+  }
+};
+
+var searching = function(tagFile, pattern){
+
+  var finalClub = getSelector(pattern);
+  if (finalClub == 'Pattern Not Found') {
+    return 'Pattern Not Found';
+  }
+  // read tagFile
+  var string = '';
+  var r = new RegExp(finalClub + '\\|.*\\n', 'g'); // searching regex expression
+  string = fs.readFileSync(tagFile) + '';
+  var res = string.match(r);
+  return res;
+};
+
+var prettyResult = function(res){
+  var string = '';
+  var obj = {};
+  for (var i = 0; i < res.length; i++) {
+    var r = /(.*)\|(.*)\|(.*)/;
+    var s = res[i].match(r);
+    obj[s[2]] = s[3]; // s[3] - path; s[2] - position
+  };
+  var keys = Object.keys(obj);
+  for (var i = 0; i < keys.length; i++) {
+    if (i == 0) string += obj[keys[i]] + '|' + keys[i];
+    else string += '&&' + obj[keys[i]] + '|' + keys[i];
+  }
+  return string;
+};
+
+// open file in tags with file name
+var openFileWithFileName = function(tagFile, fileName) {
+  var string = fs.readFileSync(tagFile) + '';
+  var fileName = fileName.replace(/\./g, '\\.');
+  var fileName = fileName.replace(/\+/g, '\\+');
+  var r = new RegExp('\\|[^\\|]*' + fileName + '\\n','g');
+  //var r = new RegExp("\\|[^\\|]*FlxG\\.m\\n",'g');
+  var result = string.match(r);
+  if (result == null) return "File Not Found";
+  return result[0];
+};
+
+// Note: Make sure we just want the first result in the list(Array)
+var getFileListWithFormat = function(s){
+  var res = s.replace(/(\||\n)/g, '');
+  return res;
+};
+
+// searching Tags
+// usage: objcscope -S tagfile "pattern"
+if (process.argv[2] == "-S") {
+  var tagFile = process.argv[3];
+  tagFile = tagFile.replace(/ /g, '\\ ');
+  var pattern = process.argv[4];
+
+  var result = searching(tagFile, pattern);
+  if (result == null) return "Pattern Not Found";
+  var result = prettyResult(result);
+  console.log(result);
+  // usage: objcscope -L tagfile "filename"
+}else if(process.argv[2] == "-L"){
+  var tagFile = process.argv[3];
+  tagFile = tagFile.replace(/ /g, '\\ ');
+  var pattern = process.argv[4];
+
+  var result = searching(tagFile, pattern);
+  if (result == null) return "Pattern Not Found";
+  var result = prettyResult(result);
+  console.log(result);
+}else if(process.argv[2] == '-f'){ // Search file by file name
+  var tagFile = process.argv[3];
+  tagFile = tagFile.replace(/ /g, '\\ ');
+  var filename = process.argv[4];
+  var result = openFileWithFileName(tagFile, filename);
+  if (result == null) return "File Not Found";
+  var result = getFileListWithFormat(result);
+  console.log(result);
+}else{
+  //var s = "[self addChild: sprite\n z: 1];";
+  //var ret = getSelector(s);
+  //console.log(ret);
+
+  // delete ocTags and callTags
+  if (fs.existsSync(ocTags)) {
+    fs.unlinkSync(ocTags);
+  }
+
+  if (fs.existsSync(callTags)) {
+    fs.unlinkSync(callTags);
+  }
+
+  readDir(process.argv[2]);
+}
+

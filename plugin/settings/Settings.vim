@@ -23,10 +23,10 @@ set splitright                        " always open vertical split window in the
 set splitbelow                        " always open horizontal split window below
 set scrolloff=3                       " start scrolling when n lines away from margins
 set switchbuf=useopen
-set showtabline=2                     " always show tab
+"set showtabline=2                     " always show tab
 set wildmode=longest,list             " use emacs-style tab completion when selecting files, etc
 set wildmenu                          " make tab completion for files/buffers act like bash
-set key=			      " disable encryption
+set key=                  " disable encryption
 set synmaxcol=2048
 
 filetype on                           " enable filetype detection
@@ -48,10 +48,11 @@ set ignorecase                        " ignore case when searching
 set smartcase
 set smarttab                          " insert tabs on the start of a line according to
 set expandtab                         " replace <TAB> with spaces
-set softtabstop=2
-set shiftwidth=2
-set noexpandtab
-set shortmess=I                       " remove splash wording
+set softtabstop=4
+set shiftwidth=4
+"set noexpandtab
+"set shortmess=4                      " remove splash wording
+set tabstop=4
 
 " disable sound on errors
 set visualbell
@@ -103,7 +104,7 @@ vmap <S-TAB> <gv
 map 0 ^
 
 " return current opened file's dirctory
-cnoremap %% <C-R>=expand('%:h').'/'<CR>
+" cnoremap %% <C-R>=expand('%:h').'/'<CR>
 
 " quick open vimrc in a new tab
 nmap <leader>v :tabe $MYVIMRC<CR>

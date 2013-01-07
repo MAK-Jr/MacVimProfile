@@ -1,10 +1,13 @@
 set guioptions=ce
 set antialias
-colorscheme rails_envy
-set linespace=2
+colorscheme slate
+set linespace=4
+set fenc=utf-8
+set expandtab
+set tabstop=4
 
 if has("gui_macvim")
-  set guifont=Monaco:h17
+  set guifont=courier:h12
 elseif has("gui_gtk")
   set guifont=Monospace\ 14
 else
@@ -43,3 +46,35 @@ if has("gui_macvim")
   endfor
 
 endif
+
+" Vim width and height
+set lines=40 columns=85
+
+hi CursorLine guibg=#262626
+"autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
+"autocmd VimEnter * wincmd q
+let g:user_zen_expandabbr_key = '<c-e>'
+
+noremap <Leader>l :ListMethods <CR>
+
+" When switching to script-coding mode, this varaible will be used!
+" Example: so $PittMakFile
+let $tabs_2 = $HOME.'/.vim/2tabs.vim'
+let $tabs_4 = $HOME.'/.vim/4tabs.vim'
+
+" so $PittMakFile
+"
+let filename = expand('%')
+let extensions = expand('%:e')
+if extensions != 'h' && extensions != 'cc' && extensions != 'm' && extensions != 'mm' && extensions != 'c'
+    so $tabs_2
+else
+  so $tabs_4
+  " tab stop
+  " added by Pitt Mak
+  " cause set tabstop=4 in .vimrc had no effects, so i put it here
+  ""autocmd VimEnter * set tabstop=4
+  ""autocmd VimEnter * retab
+endif
+

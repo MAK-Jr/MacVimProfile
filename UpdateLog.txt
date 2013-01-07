@@ -1,0 +1,7 @@
+* add "autocmd VimEnter * wincmd q" to gvimrc to close new file split window
+* set expandtab added to gvimrc to convert tab to space(2)
+* Successfully add clang_complete to MacVim
+* Add atch-Bracket-for-Objective-C
+* set tabstop = 4
+* edit cocoa.vim 
+* make .h to be objc file type

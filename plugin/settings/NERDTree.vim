@@ -1,4 +1,5 @@
-nnoremap <silent> <F2> :NERDTreeMirrorToggle<CR>
+nnoremap <silent> <F2> :NERDTree<CR>
+nnoremap <silent> <F3> :NERDTreeClose<CR>
 let NERDTreeShowBookmarks=0
 let NERDTreeChDirMode=2
 let NERDTreeMouseMode=2
@@ -11,3 +12,6 @@ map <leader>r :NERDTreeFind<cr>
 let NERDTreeMinimalUI=1
 let NERDTreeDirArrows=1
 let g:NERDTreeWinSize=30
+let NERDChristmasTree=1
+let g:nerdtree_tabs_autoclose = 0
+
