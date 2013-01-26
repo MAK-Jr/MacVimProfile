@@ -8,6 +8,7 @@ set tabstop=4
 
 if has("gui_macvim")
   set guifont=courier:h12
+  "set guifont=courier:h12
 elseif has("gui_gtk")
   set guifont=Monospace\ 14
 else
@@ -78,3 +79,7 @@ else
   ""autocmd VimEnter * retab
 endif
 
+" Key mapping for rails
+map <S-E> :Rview<CR>
+map <S-C> :Rcontroller<CR>
+map <S-M> :Rmodel<CR>

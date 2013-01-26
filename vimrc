@@ -37,7 +37,7 @@ let g:clang_conceal_snippets = 1
 let g:clang_close_preview = 0
 let NERDTreeShowHidden = 1
 
-set tags=/Users/Pitt/Apps/ericjohnson-canabalt-ios-ef43b7d/tags
+set tags=/Users/Pitt/Ruby/rails/tags
 let tlist_objc_settings = 'objc;i:interface;c:class;m:method;p:property'
 
 map <C-G> :call g:OCSCOPE_ListTags()<CR>
