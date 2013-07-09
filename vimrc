@@ -25,7 +25,7 @@ vnoremap > >gv
 let g:clang_use_library=0
 ""let g:clang_library_path="/Users/Pitt/eddie-vim/bundle/clang_complete/plugin/clang"
 
-"let g:clang_library_path="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
+"let g:clang_library_path="/Applications/Xcode5-DP.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib"
 
 let g:clang_user_options='|| exit 0'
 let g:clang_complete_auto = 0
@@ -41,6 +41,6 @@ set tags=/Users/Pitt/Ruby/rails/tags
 let tlist_objc_settings = 'objc;i:interface;c:class;m:method;p:property'
 
 map <C-G> :call g:OCSCOPE_ListTags()<CR>
-let g:ocTagFile="/Users/Pitt/Apps/ericjohnson-canabalt-ios-ef43b7d/ocTags"
-let g:callTagFile="/Users/Pitt/Apps/ericjohnson-canabalt-ios-ef43b7d/callTags"
+let g:ocTagFile="/Users/Pitt/Downloads/Softwares/macvim/src/MacVim/ocTags"
+let g:callTagFile="/Users/Pitt/Downloads/Softwares/macvim/src/MacVim/callTags"
 "let g:ocTagFile="/Users/Pitt/Desktop/Super-Weak-Boy/ocTags"
