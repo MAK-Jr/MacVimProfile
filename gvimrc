@@ -85,15 +85,4 @@ map <S-E> :Rview<CR>
 map <S-C> :Rcontroller<CR>
 map <S-M> :Rmodel<CR>
 
-" Prevent auto-complete while the cursor at the beginning of line or not on a
-" word
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
 
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
