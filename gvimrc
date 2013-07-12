@@ -1,15 +1,15 @@
 set guioptions=ce
 set antialias
 colorscheme slate
-set linespace=4
+set linespace=2
 set fenc=utf-8
 set expandtab
 set tabstop=4
 syntax on
 
 if has("gui_macvim")
-  set guifont=courier:h12
   "set guifont=courier:h12
+  set guifont=menlo:h12
 elseif has("gui_gtk")
   set guifont=Monospace\ 14
 else
