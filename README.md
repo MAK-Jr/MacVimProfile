@@ -4,7 +4,7 @@ Primary Vim relative settings are in `plugin/settings/Settings.vim` file, and is
 
 It's how my Vim looks now:
 
-![image](https://github.com/MAK-Jr/MacVimProfile/blob/master/screenshots/vim-2012-03-27-macvim.png)
+![image](https://raw.github.com/MAK-Jr/MacVimProfile/master/screenshots/vim-2012-03-27-macvim.png)
 
 and <a href="http://blog.eddie.com.tw/2012/03/06/my-vimrc/" target="_blank">Here</a> are some screenshots on the other platforms.
 
