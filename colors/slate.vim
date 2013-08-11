@@ -36,7 +36,7 @@ let colors_name = "slate"
 :hi Include guifg=red ctermfg=red
 ":hi PreProc guifg=red guibg=none ctermfg=none
 :hi Operator guifg=Red ctermfg=Red
-:hi Define guifg=gold gui=bold ctermfg=yellow
+:hi Define guifg=#E28964 gui=bold ctermfg=#E28964
 :hi Type guifg=CornflowerBlue ctermfg=2
 :hi Function guifg=navajowhite ctermfg=brown
 :hi Structure guifg=green ctermfg=green

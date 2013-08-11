@@ -6,10 +6,13 @@ set fenc=utf-8
 set expandtab
 set tabstop=4
 syntax on
+set laststatus=0
+set nocursorline
+set nonu
 
 if has("gui_macvim")
   "set guifont=courier:h12
-  set guifont=menlo:h12
+  set guifont=monaco:h12
 elseif has("gui_gtk")
   set guifont=Monospace\ 14
 else
@@ -50,7 +53,7 @@ if has("gui_macvim")
 endif
 
 " Vim width and height
-set lines=40 columns=85
+set lines=40 columns=110
 
 hi CursorLine guibg=#262626
 "autocmd VimEnter * NERDTree

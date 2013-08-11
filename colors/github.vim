@@ -1,7 +1,7 @@
 " Vim color file
 " Converted from Textmate theme GitHub using Coloration v0.3.2 (http://github.com/sickill/coloration)
 
-set background=light
+set background=dark
 highlight clear
 
 if exists("syntax_on")
@@ -10,9 +10,11 @@ endif
 
 let g:colors_name = "GitHub"
 
+set nucursorline
+hi Normal guibg=#F5EDE2 guifg=NONE
 hi Cursor ctermfg=NONE ctermbg=0 cterm=NONE guifg=NONE guibg=#000000 gui=NONE
 hi Visual ctermfg=NONE ctermbg=153 cterm=NONE guifg=NONE guibg=#bcd5fa gui=NONE
-hi CursorLine ctermfg=NONE ctermbg=188 cterm=NONE guifg=NONE guibg=#dfdfe6 gui=NONE
+hi CursorLine ctermfg=NONE ctermbg=188 cterm=NONE guifg=darkblue guibg=NONE gui=NONE
 hi CursorColumn ctermfg=NONE ctermbg=188 cterm=NONE guifg=NONE guibg=#dfdfe6 gui=NONE
 hi ColorColumn ctermfg=NONE ctermbg=188 cterm=NONE guifg=NONE guibg=#dfdfe6 gui=NONE
 hi LineNr ctermfg=244 ctermbg=188 cterm=NONE guifg=#7c7c80 guibg=#dfdfe6 gui=NONE
