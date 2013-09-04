@@ -12,7 +12,8 @@ set nonu
 
 if has("gui_macvim")
   "set guifont=courier:h12
-  set guifont=monaco:h12
+  "set guifont=monaco:h12
+  set guifont=consolas:h13
 elseif has("gui_gtk")
   set guifont=Monospace\ 14
 else
@@ -53,7 +54,7 @@ if has("gui_macvim")
 endif
 
 " Vim width and height
-set lines=40 columns=110
+set lines=40 columns=160
 
 hi CursorLine guibg=#262626
 "autocmd VimEnter * NERDTree
@@ -82,10 +83,4 @@ else
   ""autocmd VimEnter * set tabstop=4
   ""autocmd VimEnter * retab
 endif
-
-" Key mapping for rails
-map <S-E> :Rview<CR>
-map <S-C> :Rcontroller<CR>
-map <S-M> :Rmodel<CR>
-
 

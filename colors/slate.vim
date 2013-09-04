@@ -18,7 +18,9 @@ let colors_name = "slate"
 :hi IncSearch guifg=green guibg=black cterm=none ctermfg=yellow ctermbg=green
 :hi ModeMsg guifg=goldenrod cterm=none ctermfg=brown
 :hi MoreMsg guifg=SeaGreen ctermfg=darkgreen
-:hi NonText guifg=RoyalBlue guibg=grey15 cterm=bold ctermfg=blue
+":hi NonText guifg=RoyalBlue guibg=grey15 cterm=bold ctermfg=blue
+" Hack: to hide ~ at left
+:hi NonText guifg=#262626
 :hi Question guifg=springgreen ctermfg=green
 :hi Search guibg=peru guifg=wheat cterm=none ctermfg=grey ctermbg=blue
 :hi SpecialKey guifg=yellowgreen ctermfg=darkgreen
@@ -36,7 +38,7 @@ let colors_name = "slate"
 :hi Include guifg=red ctermfg=red
 ":hi PreProc guifg=red guibg=none ctermfg=none
 :hi Operator guifg=Red ctermfg=Red
-:hi Define guifg=#E28964 gui=bold ctermfg=#E28964
+:hi Define guifg=#E28964 gui=bold ctermfg=none
 :hi Type guifg=CornflowerBlue ctermfg=2
 :hi Function guifg=navajowhite ctermfg=brown
 :hi Structure guifg=green ctermfg=green
