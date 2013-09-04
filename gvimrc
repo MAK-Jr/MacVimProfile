@@ -9,6 +9,7 @@ syntax on
 set laststatus=0
 set nocursorline
 set nonu
+set foldmethod=indent
 
 if has("gui_macvim")
   "set guifont=courier:h12
